@@ -3,7 +3,9 @@ const mongoose = require("mongoose");
 const partnerSchema = new mongoose.Schema({
     partner_name:String,
     partner_email: String,
-    login_link:String
+    login_link:String,
+    events:Array,
+    otp:{type:String,default:""}
 });
 
 const Partner = mongoose.model("partner",partnerSchema);
