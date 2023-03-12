@@ -54,4 +54,20 @@ const createSuperAdmin = async (req, res) => {
   }
 };
 
-module.exports = { loginSuperAdmin, createSuperAdmin, getPartners };
+const addPartner = async ( req, res )=>{
+    const { partner_name , partner_email } = req.body;
+    const login_link = `localhost:3000/${partner_name}/login`;
+    try {
+        const newPartner = new Partner({
+            partner_name,
+            partner_email,
+            login_link
+        });
+        newPartner.save();
+        res.status(201).send({"message":"Partner is created successfully."});
+    } catch (error) {
+        res.status(400).send({error:error.message});
+    }
+}
+
+module.exports = { loginSuperAdmin, createSuperAdmin, getPartners, addPartner };
