@@ -72,12 +72,10 @@ const addPartner = async (req, res) => {
 };
 
 const editPartnerDetails = async (req, res) => {
-  const { email, newName, newEmail } = req.body;
+  const { partner_email, newName, newEmail } = req.body;
+  const login_link = `localhost:3000/${newName}/login`;
   try {
-    const result = await Partner.updateOne(
-      { email },
-      { partner_email: newEmail, partner_name: newName }
-    );
+    const result = await Partner.updateOne({ partner_email },{ partner_email: newEmail, partner_name: newName, login_link });
     res.status(202).send({ result });
   } catch (error) {
     res.status(400).send({ error: error.message });
@@ -85,9 +83,9 @@ const editPartnerDetails = async (req, res) => {
 };
 
 const deletePartner = async (req, res) => {
-  const { email } = req.body;
+  const { partner_email } = req.body;
   try {
-    let result = await Partner.deleteOne({email});
+    let result = await Partner.deleteOne({partner_email});
     res.status(202).send({result});
   } catch (error) {
     res.status(400).send({error:error.message})
