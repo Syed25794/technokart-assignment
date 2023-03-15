@@ -43,8 +43,13 @@ const loginSuperAdmin = async (req, res) => {
     const admin = await SuperAdmin.findOne({ email });
 
     //comparing hashed and login password
-    const isValid = await bcrypt.compare(password, admin.password);
-    res.status(200).send({ isValid });
+    bcrypt.compare(password, admin.password, function(err, result) {
+        if( err ){
+            res.status(400).send({error:err.message});
+        }else{
+            res.status(200).send({result});
+        }
+    });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
