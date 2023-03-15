@@ -1,11 +1,12 @@
 const { Router } = require("express");
-const { generateOtp } = require("../controllers/partner.controller");
+const { generateOtp, loginPartner, addEvent } = require("../controllers/partner.controller");
+const redirectEventPage = require("../middlewares/redirectEventPage");
+const redirectLoginPage = require("../middlewares/redirectLoginPage");
 
 const partnerRoutes = Router();
 
 partnerRoutes.post("/generateOtp",generateOtp);
-partnerRoutes.post("/login");
-partnerRoutes.post("/add_event");
-partnerRoutes.get("/thankyoupage");
+partnerRoutes.post("/login",redirectEventPage,loginPartner);
+partnerRoutes.post("/add_event",redirectLoginPage,addEvent);
 
 module.exports = partnerRoutes ;

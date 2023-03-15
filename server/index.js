@@ -2,19 +2,30 @@ const express = require("express");
 const connection = require("./config/database");
 const adminRoutes = require("./routes/admin.routes");
 const partnerRoutes = require("./routes/partner.routes");
+const session = require('express-session');
+const cors = require("cors");
 require("dotenv").config();
 const { PORT } = process.env ; 
 
 const application = express();
 
 application.use(express.json());
+application.use(cors());
+// configure session middleware
+application.use(session({
+    name:"hihfknvjsdo",
+    secret: process.env.SECRET_KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        secure: false,
+        maxAge:1000 * 60 * 15,
+        sameSite:true
+     }
+}));
 
-
-application.get("/",(req,res)=>{
-    res.send("<h1>Welcome to Home Page.</h1>");
-});
-application.use("/super-admin",adminRoutes);
 application.use("/:partnername",partnerRoutes);
+application.use("/super-admin",adminRoutes);
 
 application.listen(PORT,async ()=>{
     try{

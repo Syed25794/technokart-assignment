@@ -4,7 +4,6 @@ const partnerSchema = new mongoose.Schema({
     partner_name:String,
     partner_email: String,
     login_link:String,
-    events:Array,
     otp:{type:String,default:""}
 });
 

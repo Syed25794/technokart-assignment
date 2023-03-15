@@ -50,8 +50,7 @@ const addPartner = async (req, res) => {
       const newPartner = new Partner({
         partner_name,
         partner_email,
-        login_link,
-        events:[]
+        login_link
       });
       newPartner.save();
       res.status(201).send({ message: "Partner is created successfully." });
