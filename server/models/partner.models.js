@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const partnerSchema = new mongoose.Schema({
     partner_name:String,
     partner_email: String,
-    login_link:String,
+    login_link:{type:String,default:""},
     otp:{type:String,default:""}
 });
 
