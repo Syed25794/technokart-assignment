@@ -4,6 +4,7 @@ const adminRoutes = require("./routes/admin.routes");
 const partnerRoutes = require("./routes/partner.routes");
 const session = require('express-session');
 const cors = require("cors");
+// const { destroySession } = require("./controllers/partner.controller");
 require("dotenv").config();
 const { PORT } = process.env ; 
 
@@ -24,8 +25,14 @@ application.use(session({
      }
 }));
 
-application.use("/:partnername",partnerRoutes);
+// application.get("/destroySession",destroySession);
+
 application.use("/super-admin",adminRoutes);
+application.use("/:partnername",partnerRoutes);
+// Middleware function for handling undefined routes
+application.use((req, res, next) => {
+    res.status(404).send('Sorry, the requested URL was not found on this server.');
+});
 
 application.listen(PORT,async ()=>{
     try{

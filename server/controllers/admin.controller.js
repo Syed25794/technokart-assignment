@@ -4,14 +4,19 @@ const bcrypt = require("bcrypt");
 
 const createSuperAdmin = async (req, res) => {
     let { adminName, email, password } = req.body;
+
+    //hashing password
     bcrypt.hash(password, 5, async (error, hashedPassword) => {
       if (error) {
         return res.status(400).send({ error: error.message });
       }
       password = hashedPassword;
     });
+
     try {
       const admin = await SuperAdmin.findOne();
+      
+      //If super admin exists
       if (admin) {
         const updateAdmin = await SuperAdmin.updateOne({
           adminName,
@@ -36,6 +41,8 @@ const loginSuperAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const admin = await SuperAdmin.findOne({ email });
+
+    //comparing hashed and login password
     const isValid = await bcrypt.compare(password, admin.password);
     res.status(200).send({ isValid });
   } catch (error) {
@@ -45,8 +52,11 @@ const loginSuperAdmin = async (req, res) => {
 
 const addPartner = async (req, res) => {
     const { partner_name, partner_email } = req.body;
+
+    //making link for login
     const login_link = `localhost:3000/${partner_name}/login`;
     try {
+        //saving partner
       const newPartner = new Partner({
         partner_name,
         partner_email,
@@ -64,6 +74,7 @@ const getPartners = async (req, res) => {
   let limitPartner = limit;
   let skips = 10 * (Number(page) - 1);
   try {
+    //skipping and limit for pagination
     let partners = await Partner.find().skip(skips).limit(limitPartner);
     res.status(200).send({ data: partners });
   } catch (error) {
@@ -75,6 +86,7 @@ const editPartnerDetails = async (req, res) => {
   const { partner_email, newName, newEmail } = req.body;
   const login_link = `localhost:3000/${newName}/login`;
   try {
+    //updating partner values
     const result = await Partner.updateOne({ partner_email },{ partner_email: newEmail, partner_name: newName, login_link });
     res.status(202).send({ result });
   } catch (error) {
@@ -85,6 +97,7 @@ const editPartnerDetails = async (req, res) => {
 const deletePartner = async (req, res) => {
   const { partner_email } = req.body;
   try {
+    //deleting partner document
     let result = await Partner.deleteOne({partner_email});
     res.status(202).send({result});
   } catch (error) {
