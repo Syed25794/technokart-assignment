@@ -55,7 +55,7 @@ const loginPartner = async (req, res) => {
         //comparing database otp and client side otp
       if (partner.otp == otp) {
         //setting id for session
-        req.session.partnerId = partner._id;
+        // req.session.partnerId = partner._id;
         res.status(200).send({ message: "login successfully", res: req.session });
       } else {
         res.status(400).send({ message: "otp not verified!" });
