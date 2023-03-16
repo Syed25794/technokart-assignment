@@ -1,54 +1,14 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Table,
-  TableContainer,
-  Tbody,
-  Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
-} from "@chakra-ui/react";
+import {Box,Button,ButtonGroup,Table,TableContainer,Tbody,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
+import { AddPartnerModal } from "../components/AddPartnerModal";
 import TableRow from "../components/TableRow";
 
-const AddPartnerModal = ({ onClose, isOpen }) => {
-  return (
-    <>
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>This is modal body.</Text>
-          </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  );
-};
 
 export const Dashboard = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const limit = 10;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getPartners = useCallback((async function getData() {
@@ -71,6 +31,7 @@ export const Dashboard = () => {
   useEffect(() => {
     getPartners();
   }, [getPartners]);
+
 
   const deletePartner = async (user) => {
     try {
@@ -95,6 +56,7 @@ export const Dashboard = () => {
   };
 
   const editPartnerDetails=async(user)=>{
+    console.log(user)
     try {
       const payload = {
         partner_email: user.partner_email,
@@ -116,11 +78,25 @@ export const Dashboard = () => {
     }
   }
 
+  const addPartners=async(payload)=>{
+    try {
+      let response = await fetch("https://technokart-backend.onrender.com/super-admin/addPartner",{
+        method:"POST",
+        body:JSON.stringify(payload),
+        headers:{"Content-Type":"application/json"}
+      });
+      let result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   return (
     <Box>
       <Button onClick={onOpen}>Add Partners</Button>
-      <AddPartnerModal isOpen={isOpen} onClose={onClose} />
+      <AddPartnerModal isOpen={isOpen} onClose={onClose} addPartners={addPartners} />
       <ButtonGroup float="right" marginRight="150px" marginBottom="15px">
         <Button
           onClick={() => setPage((prev) => prev + 1)}
