@@ -4,7 +4,6 @@ const adminRoutes = require("./routes/admin.routes");
 const partnerRoutes = require("./routes/partner.routes");
 // const session = require('express-session');
 const cors = require("cors");
-// const { destroySession } = require("./controllers/partner.controller");
 require("dotenv").config();
 const { PORT } = process.env ; 
 
@@ -12,7 +11,7 @@ const application = express();
 
 application.use(express.json());
 application.use(cors());
-// configure session middleware
+// // configure session middleware
 // application.use(session({
 //     name:"hihfknvjsdo",
 //     secret: process.env.SECRET_KEY,
@@ -24,8 +23,6 @@ application.use(cors());
 //         sameSite:true
 //      }
 // }));
-
-// application.get("/destroySession",destroySession);
 
 application.use("/super-admin",adminRoutes);
 application.use("/:partnername",partnerRoutes);
