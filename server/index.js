@@ -2,7 +2,7 @@ const express = require("express");
 const connection = require("./config/database");
 const adminRoutes = require("./routes/admin.routes");
 const partnerRoutes = require("./routes/partner.routes");
-const session = require('express-session');
+// const session = require('express-session');
 const cors = require("cors");
 // const { destroySession } = require("./controllers/partner.controller");
 require("dotenv").config();
@@ -13,17 +13,17 @@ const application = express();
 application.use(express.json());
 application.use(cors());
 // configure session middleware
-application.use(session({
-    name:"hihfknvjsdo",
-    secret: process.env.SECRET_KEY,
-    resave: false,
-    saveUninitialized: false,
-    cookie: { 
-        secure: false,
-        maxAge:1000 * 60 * 15,
-        sameSite:true
-     }
-}));
+// application.use(session({
+//     name:"hihfknvjsdo",
+//     secret: process.env.SECRET_KEY,
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: { 
+//         secure: false,
+//         maxAge:1000 * 60 * 15,
+//         sameSite:true
+//      }
+// }));
 
 // application.get("/destroySession",destroySession);
 
