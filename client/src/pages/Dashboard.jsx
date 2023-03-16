@@ -2,40 +2,125 @@ import {
   Box,
   Button,
   ButtonGroup,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Table,
   TableContainer,
   Tbody,
+  Text,
   Th,
   Thead,
   Tr,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import TableRow from "../components/TableRow";
+
+const AddPartnerModal = ({ onClose, isOpen }) => {
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Modal Title</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Text>This is modal body.</Text>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="blue" mr={3} onClick={onClose}>
+              Close
+            </Button>
+            <Button variant="ghost">Secondary Action</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+};
 
 export const Dashboard = () => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(1);
-  useEffect(() => {
-    async function getData() {
-      try {
-        let response = await fetch(
-          `https://technokart-backend.onrender.com/super-admin/dashboard?page=${page}&limit=${limit}`,
-          {
-            method: "GET",
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        let result = await response.json();
-        setData(result.data);
-        console.log(result);
-      } catch (error) {
-        console.log(error);
-      }
+  const [limit, setLimit] = useState(10);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const getPartners = useCallback((async function getData() {
+    try {
+      let response = await fetch(
+        `https://technokart-backend.onrender.com/super-admin/dashboard?page=${page}&limit=${limit}`,
+        {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      let result = await response.json();
+      setData(result.data);
+      console.log(result);
+    } catch (error) {
+      console.log(error);
     }
-  },[page,limit]);
+  }),[page,limit]);
+
+  useEffect(() => {
+    getPartners();
+  }, [getPartners]);
+
+  const deletePartner = async (user) => {
+    try {
+      const payload = {
+        partner_email: user.partner_email,
+      };
+      console.log(payload);
+      let response = await fetch(
+        "https://technokart-backend.onrender.com/super-admin/deletePartner",
+        {
+          method: "DELETE",
+          body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      let result = await response.json();
+      console.log(result);
+      getPartners();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const editPartnerDetails=async(user)=>{
+    try {
+      const payload = {
+        partner_email: user.partner_email,
+      };
+      console.log(payload);
+      let response = await fetch(
+        "https://technokart-backend.onrender.com/super-admin/deletePartner",
+        {
+          method: "PATCH",
+          body: JSON.stringify(payload),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      let result = await response.json();
+      console.log(result);
+      getPartners();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+
   return (
     <Box>
+      <Button onClick={onOpen}>Add Partners</Button>
+      <AddPartnerModal isOpen={isOpen} onClose={onClose} />
       <ButtonGroup float="right" marginRight="150px" marginBottom="15px">
         <Button
           onClick={() => setPage((prev) => prev + 1)}
@@ -60,20 +145,26 @@ export const Dashboard = () => {
         borderRadius="10px"
         marginBottom="20px"
       >
-        <Table variant="striped">
+        <Table variant="simple">
           <Thead fontSize="30px">
             <Tr>
-              <Th>Image</Th>
-              <Th>Name</Th>
-              <Th>Gender</Th>
-              <Th>Age</Th>
+              <Th>Partner Name</Th>
               <Th>Email</Th>
-              <Th>Country</Th>
+              <Th>Login Link</Th>
+              <Th>Edit</Th>
+              <Th>Delete</Th>
             </Tr>
           </Thead>
           <Tbody>
             {data?.map((user) => {
-              return <TableRow key={user._id} user={user} />;
+              return (
+                <TableRow
+                  key={user._id}
+                  user={user}
+                  deletePartner={deletePartner}
+                  editPartnerDetails={editPartnerDetails}
+                />
+              );
             })}
           </Tbody>
         </Table>

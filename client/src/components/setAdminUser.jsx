@@ -34,28 +34,37 @@ export const SetAdminUser = () => {
     setName("");
     setEmail("");
     setPassword("");
-    try {
-      let response = await fetch(
-        "https://technokart-backend.onrender.com/super-admin/createSuperAdmin",
-        {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      let result = await response.json();
-      console.log(result);
-      setIsLoading(false);
-      setIsCreated(true);
-      setTimeout(()=>{
-        setIsCreated(false);
-        console.log("--------------fjdljfls");
-        navigate("/adminLogin")
-      },1000)
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+    if (payload.adminName && payload.email && payload.password) {
+      try {
+        let response = await fetch(
+          "https://technokart-backend.onrender.com/super-admin/createSuperAdmin",
+          {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        let result = await response.json();
+        console.log(result);
+        setIsLoading(false);
+        setIsCreated(true);
+        setTimeout(() => {
+          setIsCreated(false);
+          console.log("--------------fjdljfls");
+          navigate("/adminLogin");
+        }, 1000);
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false);
+        setIsError(true);
+      }
+    }else{
       setIsError(true);
+      setTimeout(()=>{
+        console.log(isError,"fdjfldjsl");
+        setIsError(null);
+        setIsLoading(false);
+      },1000)
     }
   };
 
@@ -70,7 +79,7 @@ export const SetAdminUser = () => {
       {isError ? (
         <Alert status="error" w="400px" m="auto" marginTop="10px">
           <AlertIcon />
-          Something went wrong!
+          Please provide all the credential!
         </Alert>
       ) : null}
       <Card

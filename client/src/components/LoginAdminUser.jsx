@@ -31,27 +31,45 @@ export const LoginAdminUser = () => {
     };
     setEmail("");
     setPassword("");
-    try {
-      let response = await fetch(
-        "https://technokart-backend.onrender.com/super-admin/login",
-        {
-          method: "POST",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
+    if( payload.email && payload.password ){
+      try {
+        let response = await fetch(
+          "https://technokart-backend.onrender.com/super-admin/login",
+          {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        let result = await response.json();
+        setIsLoading(false);
+        if( !result.result || result.error ){
+          setIsError(true);
+        }else{
+          setIsLogin(true);
         }
-      );
-      let result = await response.json();
-      console.log(result);
-      setIsLoading(false);
-      setIsLogin(true);
-      setTimeout(() => {
-        setIsLogin(true);
-        navigate("/dashboard");
-      }, 1000);
-    } catch (error) {
-      console.log(error);
-      setIsLoading(false);
+        console.log(!result.result,isError,isLogin);
+        setTimeout(() => {
+          if( !isError ){
+            navigate("/dashboard");
+            setIsLogin(false);
+          }else{
+            setIsError(false);
+          }
+        }, 1000);
+      } catch (error) {
+        setIsError(true);
+        setTimeout(()=>{
+          setIsError(false);
+        },1000)
+        setIsLoading(false);
+      }
+    }else{
       setIsError(true);
+      setTimeout(()=>{
+        setIsError(false);
+        setIsLoading(false);
+      },1000)
     }
   };
 
@@ -66,7 +84,7 @@ export const LoginAdminUser = () => {
       {isError ? (
         <Alert status="error" w="400px" m="auto" marginTop="10px">
           <AlertIcon />
-          Something went wrong!
+          Please provide correct and full credetial!
         </Alert>
       ) : null}
       <Card
