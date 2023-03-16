@@ -1,17 +1,4 @@
-import {
-  Alert,
-  AlertIcon,
-  Box,
-  Button,
-  Card,
-  CardBody,
-  FormControl,
-  Heading,
-  Input,
-  InputGroup,
-  Spinner,
-  Stack,
-} from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Card, CardBody, FormControl, Heading, Input, InputGroup, Spinner, Stack } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 
@@ -22,16 +9,16 @@ export const LoginAdminUser = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
-  const createAdmin = async (e) => {
+
+
+  const loginAdmin = async (e) => {
     setIsLoading(true);
     e.preventDefault();
-    const payload = {
-      email,
-      password,
-    };
+    const payload = {email,password};
+    console.log(payload,email,password);
     setEmail("");
     setPassword("");
-    if( payload.email && payload.password ){
+    if( email && password ){
       try {
         let response = await fetch(
           "https://technokart-backend.onrender.com/super-admin/login",
@@ -50,19 +37,14 @@ export const LoginAdminUser = () => {
         }
         console.log(!result.result,isError,isLogin);
         setTimeout(() => {
-          if( !isError ){
-            navigate("/dashboard");
-            setIsLogin(false);
-          }else{
-            setIsError(false);
-          }
+          navigate("/dashboard");
         }, 1000);
       } catch (error) {
         setIsError(true);
         setTimeout(()=>{
           setIsError(false);
+          setIsLoading(false);
         },1000)
-        setIsLoading(false);
       }
     }else{
       setIsError(true);
@@ -87,67 +69,33 @@ export const LoginAdminUser = () => {
           Please provide correct and full credetial!
         </Alert>
       ) : null}
-      <Card
-        direction={{ base: "column", sm: "row" }}
-        overflow="hidden"
-        variant="outline"
-        w="lg"
-        m="auto"
-        marginTop="50px"
-      >
+      <Card direction={{ base: "column", sm: "row" }} overflow="hidden" variant="outline" w="lg" m="auto" marginTop="50px" >
         <Stack>
           <CardBody>
             <Heading textAlign="center" size="lg">
               Login Admin
             </Heading>
             <form>
-              <Stack
-                spacing={4}
-                p="1rem"
-                backgroundColor="whiteAlpha.900"
-                boxShadow="md"
-                w="450px"
-              >
+              <Stack spacing={4} p="1rem" backgroundColor="whiteAlpha.900" boxShadow="md" w="450px" >
                 <FormControl>
                   <InputGroup alignItems="center">
                     <Box w="120px">
                       <label>Email : </label>
                     </Box>
-                    <Input
-                      onChange={(e) => setEmail(e.target.value)}
-                      value={email}
-                      w="300px"
-                      marginLeft="10px"
-                      type="email"
-                      placeholder="Enter Email Address"
-                    />
+                    <Input onChange={(e) => setEmail(e.target.value)} value={email} w="300px" marginLeft="10px" type="email" placeholder="Enter Email Address" />
                   </InputGroup>
                 </FormControl>
                 <FormControl>
                   <InputGroup alignItems="center">
-                    <Box w="120px">
+                    <Box w="120px"> 
                       <label>Password : </label>
                     </Box>
-                    <Input
-                      onChange={(e) => setPassword(e.target.value)}
-                      value={password}
-                      w="300px"
-                      marginLeft="10px"
-                      type="password"
-                      placeholder="Enter Password"
-                    />
+                    <Input onChange={(e) => setPassword(e.target.value)} value={password} w="300px" marginLeft="10px" type="password" placeholder="Enter Password" />
                   </InputGroup>
                 </FormControl>
-                <Button
-                  borderRadius={0}
-                  type="submit"
-                  variant="solid"
-                  colorScheme="teal"
-                  width="full"
-                  onClick={createAdmin}
-                >
+                <Button borderRadius={0} type="submit" variant="solid" colorScheme="teal" width="full" onClick={loginAdmin} >
                   {isLoading ? <Spinner /> : null}
-                  Register
+                  Login Admin
                 </Button>
               </Stack>
             </form>
