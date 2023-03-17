@@ -5,11 +5,13 @@ import { LoginAdminUser } from "./LoginAdminUser";
 import { PartnerLoginPage } from "./PartnerLoginPage";
 import { SetAdminUser } from "./setAdminUser";
 import { ThankYou } from "./ThankYou";
+import { HomePage } from "../pages/HomePage";
 
 export const AllRoutes = () => {
   return (
       <Routes>
-        <Route path="/" element={<SetAdminUser />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/setAdminUser" element={<SetAdminUser />} />
         <Route path="/adminLogin" element={<LoginAdminUser />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/:partnerLoginPage" element={<PartnerLoginPage />} />

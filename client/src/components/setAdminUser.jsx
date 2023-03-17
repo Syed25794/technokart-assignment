@@ -35,18 +35,15 @@ export const SetAdminUser = () => {
         setIsCreated(true);
         setTimeout(() => {
           setIsCreated(false);
-          console.log("--------------fjdljfls");
           navigate("/adminLogin");
         }, 1000);
       } catch (error) {
-        console.log(error);
         setIsLoading(false);
         setIsError(true);
       }
     }else{
       setIsError(true);
       setTimeout(()=>{
-        console.log(isError,"fdjfldjsl");
         setIsError(null);
         setIsLoading(false);
       },1000)
@@ -101,7 +98,7 @@ export const SetAdminUser = () => {
                 </FormControl>
                 <Button borderRadius={0} type="submit" variant="solid" colorScheme="teal" width="full" onClick={createAdmin}>
                   {isLoading ? <Spinner /> : null}
-                  Register
+                  Create Admin
                 </Button>
               </Stack>
             </form>
