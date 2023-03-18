@@ -1,4 +1,7 @@
 import {
+    ADD_PARTNERS_ERROR,
+    ADD_PARTNERS_LOADING,
+    ADD_PARTNERS_SUCCESS,
     DELETE_PARTNERS_ERROR,
     DELETE_PARTNERS_LOADING,
   DELETE_PARTNERS_SUCCESS,
@@ -88,3 +91,18 @@ export const getPartners = ({page,limit}) => async (dispatch) => {
       dispatch({type:GET_PARTNERS_ERROR,payload:error});
     }
 };
+
+export const addPartner = ( payload ) => async ( dispatch ) =>{
+    dispatch({type:ADD_PARTNERS_LOADING});
+    try {
+        let response = await fetch("https://technokart-backend.onrender.com/super-admin/addPartner",{
+          method:"POST",
+          body:JSON.stringify(payload),
+          headers:{"Content-Type":"application/json"}
+        });
+        let result = await response.json();
+        dispatch({type:ADD_PARTNERS_SUCCESS,payload:result.payload});
+      } catch (error) {
+        dispatch({type:ADD_PARTNERS_ERROR,payload:error});
+      }
+}

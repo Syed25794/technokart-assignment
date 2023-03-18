@@ -1,9 +1,9 @@
 import {Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPartnerModal } from "../components/AddPartnerModal";
 import TableRow from "../components/TableRow";
-import { deletePartner, getPartners } from "../redux/action";
+import { getPartners } from "../redux/action";
 
 
 
@@ -14,12 +14,14 @@ export const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
 
-  
-
-  useEffect(() => {
+  const loadData = useCallback(()=>{
     const payload={page,limit};
     dispatch(getPartners(payload));
-  }, [page,limit,dispatch]);
+  },[page,limit,dispatch])
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
 
   
@@ -47,30 +49,13 @@ export const Dashboard = () => {
     }
   }
 
-  const handleAdd=async(payload)=>{
-    console.log(payload);
-    try {
-      let response = await fetch("https://technokart-backend.onrender.com/super-admin/addPartner",{
-        method:"POST",
-        body:JSON.stringify(payload),
-        headers:{"Content-Type":"application/json"}
-      });
-      let result = await response.json();
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
-  const handleDelete=(userDetails)=>{
-    dispatch(deletePartner(userDetails.partner_email))
-  }
 
 
   return (
     <Box>
       <Button onClick={onOpen} margin="20px" colorScheme="pink">Add Partners</Button>
-      <AddPartnerModal isOpen={isOpen} onClose={onClose} addPartners={handleAdd} />
+      <AddPartnerModal isOpen={isOpen} onClose={onClose}/>
       <ButtonGroup float="right" marginRight="150px" marginBottom="15px" marginTop="20px" >
         <Button colorScheme="purple" onClick={() => {setPage((prev) => prev + 1);}} isDisabled={page === 10 || partners.length < 10}>
           Next
@@ -102,7 +87,7 @@ export const Dashboard = () => {
           <Tbody>
             {partners?.map((user,index) => {
               return (
-                <TableRow key={user._id} user={user} deletePartner={handleDelete} editPartnerDetails={editPartnerDetails} index={index} page={page-1}/>
+                <TableRow key={user._id} user={user}  editPartnerDetails={editPartnerDetails} index={index} page={page-1}/>
               );
             })}
           </Tbody>

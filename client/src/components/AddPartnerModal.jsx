@@ -1,14 +1,26 @@
 import { useState } from "react";
 import { Modal, ModalOverlay, ModalContent, ModalBody, Stack , Input, InputGroup, FormControl, Box, ModalCloseButton, Button, ModalHeader} from '@chakra-ui/react';
+import { useDispatch } from "react-redux";
+import { addPartner } from "../redux/action";
 
-export const AddPartnerModal = ({ onClose, isOpen , addPartners }) => {
+export const AddPartnerModal = ({ onClose, isOpen }) => {
     const [name,setName]=useState("");
     const [email,setEmail]=useState("");
+    const dispatch = useDispatch();
 
-    const createPayload=(e)=>{
+    const handleAdd=(e)=>{
+      e.preventDefault();
+      if( name !== "" && email !== "" ){
         const payload = { partner_email:email,partner_name:name};
-        addPartners(payload);
+        dispatch(addPartner(payload));
+        setName("");
+        setEmail("");
+        setTimeout(()=>{
+          onClose();
+        },500)
+      }
     }
+
     return (
       <>
       <Modal isOpen={isOpen} onClose={onClose} size="lg">
@@ -61,7 +73,7 @@ export const AddPartnerModal = ({ onClose, isOpen , addPartners }) => {
                   variant="solid"
                   colorScheme="teal"
                   width="full"
-                  onClick={createPayload}
+                  onClick={(e)=>handleAdd(e)}
                 >
                   Add Partner
                 </Button>
