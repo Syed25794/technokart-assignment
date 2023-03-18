@@ -12,10 +12,9 @@ export const LoginAdminUser = () => {
 
 
   const loginAdmin = async (e) => {
-    setIsLoading(true);
     e.preventDefault();
+    setIsLoading(true);
     const payload = {email,password};
-    console.log(payload,email,password);
     setEmail("");
     setPassword("");
     if( email && password ){
@@ -29,15 +28,25 @@ export const LoginAdminUser = () => {
           }
         );
         let result = await response.json();
+        console.log(result);
         setIsLoading(false);
-        if( !result.result || result.error ){
-          setIsError(true);
-        }else{
+        if( !result.result === undefined || result.result  ){
+          console.log(isLogin);
           setIsLogin(true);
+          console.log(isLogin);
+        }else{
+          console.log(isError);
+          setIsError(true);
+          console.log(isError);
         }
-        console.log(!result.result,isError,isLogin);
+        console.log(result.result,isError,isLogin);
         setTimeout(() => {
-          navigate("/dashboard");
+          if( isLogin ){
+            navigate("/dashboard");
+          }else{
+            setIsError(false);
+            setIsLoading(false);
+          }
         }, 1000);
       } catch (error) {
         setIsError(true);
@@ -93,7 +102,7 @@ export const LoginAdminUser = () => {
                     <Input onChange={(e) => setPassword(e.target.value)} value={password} w="300px" marginLeft="10px" type="password" placeholder="Enter Password" />
                   </InputGroup>
                 </FormControl>
-                <Button borderRadius={0} type="submit" variant="solid" colorScheme="teal" width="full" onClick={loginAdmin} >
+                <Button borderRadius={0} type="submit" variant="solid" colorScheme="teal" width="full" onClick={(e)=>loginAdmin(e)} >
                   {isLoading ? <Spinner /> : null}
                   Login Admin
                 </Button>
