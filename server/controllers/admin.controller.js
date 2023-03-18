@@ -70,9 +70,10 @@ const addPartner = async (req, res) => {
         partner_email,
         login_link
       });
-      newPartner.save();
+      await newPartner.save();
       const createdPartner = await Partner.findOne({partner_email});
-      res.status(201).send({ message: "Partner is created successfully.",payload:createdPartner });
+      res.status(201).send({ message: "Partner is created successfully.",payload:createdPartner.payload });
+      console.log(createdPartner);
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
