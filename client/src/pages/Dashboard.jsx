@@ -1,59 +1,28 @@
-import {Box,Button,ButtonGroup,Table,TableContainer,Tbody,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
-import { useCallback, useEffect, useState } from "react";
+import {Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { AddPartnerModal } from "../components/AddPartnerModal";
 import TableRow from "../components/TableRow";
+import { deletePartner, getPartners } from "../redux/action";
 
 
 
 export const Dashboard = () => {
-  const [data, setData] = useState([]);
+  const { partners } =useSelector((store)=> store );
   const [page, setPage] = useState(1);
   const limit = 10;
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const dispatch = useDispatch();
 
-  const getPartners = useCallback((async function getData() {
-    try {
-      let response = await fetch(
-        `https://technokart-backend.onrender.com/super-admin/dashboard?page=${page}&limit=${limit}`,
-        {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      let result = await response.json();
-      setData(result.data);
-      console.log(result);
-    } catch (error) {
-      console.log(error);
-    }
-  }),[page,limit]);
+  
 
   useEffect(() => {
-    getPartners();
-  }, [getPartners]);
+    const payload={page,limit};
+    dispatch(getPartners(payload));
+  }, [page,limit,dispatch]);
 
 
-  const deletePartner = async (user) => {
-    try {
-      const payload = {
-        partner_email: user.partner_email,
-      };
-      console.log(payload);
-      let response = await fetch(
-        "https://technokart-backend.onrender.com/super-admin/deletePartner",
-        {
-          method: "DELETE",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      let result = await response.json();
-      console.log(result);
-      getPartners();
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  
 
   const editPartnerDetails=async(user)=>{
     console.log(user)
@@ -78,7 +47,8 @@ export const Dashboard = () => {
     }
   }
 
-  const addPartners=async(payload)=>{
+  const handleAdd=async(payload)=>{
+    console.log(payload);
     try {
       let response = await fetch("https://technokart-backend.onrender.com/super-admin/addPartner",{
         method:"POST",
@@ -92,24 +62,21 @@ export const Dashboard = () => {
     }
   }
 
+  const handleDelete=(userDetails)=>{
+    dispatch(deletePartner(userDetails.partner_email))
+  }
+
 
   return (
     <Box>
-      <Button onClick={onOpen}>Add Partners</Button>
-      <AddPartnerModal isOpen={isOpen} onClose={onClose} addPartners={addPartners} />
-      <ButtonGroup float="right" marginRight="150px" marginBottom="15px">
-        <Button
-          onClick={() => setPage((prev) => prev + 1)}
-          colorScheme="blue"
-          isDisabled={page === 10 || data.length < 10}
-        >
+      <Button onClick={onOpen} margin="20px" colorScheme="pink">Add Partners</Button>
+      <AddPartnerModal isOpen={isOpen} onClose={onClose} addPartners={handleAdd} />
+      <ButtonGroup float="right" marginRight="150px" marginBottom="15px" marginTop="20px" >
+        <Button colorScheme="purple" onClick={() => {setPage((prev) => prev + 1);}} isDisabled={page === 10 || partners.length < 10}>
           Next
         </Button>
-        <Button
-          onClick={() => setPage((prev) => prev - 1)}
-          colorScheme="blue"
-          isDisabled={page === 1}
-        >
+        <Text fontSize="18px" fontWeight="semibold" color="red" marginTop="5px">{page}</Text>
+        <Button colorScheme="purple" onClick={() => {setPage((prev) => prev - 1); }} isDisabled={page === 1}>
           Previous
         </Button>
       </ButtonGroup>
@@ -123,23 +90,19 @@ export const Dashboard = () => {
       >
         <Table variant="simple">
           <Thead fontSize="30px">
-            <Tr>
-              <Th>Partner Name</Th>
-              <Th>Email</Th>
-              <Th>Login Link</Th>
-              <Th>Edit</Th>
-              <Th>Delete</Th>
+            <Tr textAlign="center">
+              <Th textAlign="center">Serial</Th>
+              <Th textAlign="center">Partner Name</Th>
+              <Th textAlign="center">Email</Th>
+              <Th textAlign="center">Login Link</Th>
+              <Th textAlign="center">Edit</Th>
+              <Th textAlign="center">Delete</Th>
             </Tr>
           </Thead>
           <Tbody>
-            {data?.map((user) => {
+            {partners?.map((user,index) => {
               return (
-                <TableRow
-                  key={user._id}
-                  user={user}
-                  deletePartner={deletePartner}
-                  editPartnerDetails={editPartnerDetails}
-                />
+                <TableRow key={user._id} user={user} deletePartner={handleDelete} editPartnerDetails={editPartnerDetails} index={index} page={page-1}/>
               );
             })}
           </Tbody>

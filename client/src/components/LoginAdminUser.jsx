@@ -7,7 +7,7 @@ import { loginAdmin } from "../redux/action";
 export const LoginAdminUser = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const {isAuth , isError, isLoading } = useSelector((store)=> store );
+  const {isAuth , isError, isLoading  } = useSelector((store)=> store );
   const [isCredential,setIsCredential]=useState(false);
   const navigate = useNavigate();
   const dispatch= useDispatch();
@@ -20,8 +20,7 @@ export const LoginAdminUser = () => {
   
   const adminLogin=(e)=>{
     e.preventDefault();
-    console.log(email,password===undefined,"email",email,typeof email);
-    if( email === undefined || password === undefined ){
+    if( email === "" || password === "" ){
       setIsCredential(true);
       setTimeout(()=>{
         setIsCredential(false);
