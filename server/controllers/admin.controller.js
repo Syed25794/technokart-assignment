@@ -41,15 +41,18 @@ const loginSuperAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
     const admin = await SuperAdmin.findOne({ email });
-
-    //comparing hashed and login password
-    bcrypt.compare(password, admin.password, function(err, result) {
+    if( admin ){
+      //comparing hashed and login password
+      bcrypt.compare(password, admin.password, function(err, result) {
         if( err ){
-            res.status(400).send({error:err.message});
+          res.status(400).send({error:err.message});
         }else{
             res.status(200).send({result});
         }
-    });
+      });
+    }else{
+      
+    }
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
@@ -68,7 +71,7 @@ const addPartner = async (req, res) => {
         login_link
       });
       newPartner.save();
-      res.status(201).send({ message: "Partner is created successfully." });
+      res.status(201).send({ message: "Partner is created successfully.",payload:newPartner });
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
