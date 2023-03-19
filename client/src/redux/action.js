@@ -1,23 +1,4 @@
-import {
-  ADD_PARTNERS_ERROR,
-  ADD_PARTNERS_LOADING,
-  ADD_PARTNERS_SUCCESS,
-  DELETE_PARTNERS_ERROR,
-  DELETE_PARTNERS_LOADING,
-  DELETE_PARTNERS_SUCCESS,
-  EDIT_PARTNERS_ERROR,
-  EDIT_PARTNERS_LOADING,
-  EDIT_PARTNERS_SUCCESS,
-  GET_PARTNERS_ERROR,
-  GET_PARTNERS_LOADING,
-  GET_PARTNERS_SUCCESS,
-  LOGIN_ADMIN_ERROR,
-  LOGIN_ADMIN_LOADING,
-  LOGIN_ADMIN_SUCCESS,
-  SET_ADMIN_ERROR,
-  SET_ADMIN_LOADING,
-  SET_ADMIN_SUCCESS,
-} from "./actionTypes";
+import { ADD_PARTNERS_ERROR, ADD_PARTNERS_LOADING, ADD_PARTNERS_SUCCESS, DELETE_PARTNERS_ERROR, DELETE_PARTNERS_LOADING, DELETE_PARTNERS_SUCCESS, EDIT_PARTNERS_ERROR, EDIT_PARTNERS_LOADING, EDIT_PARTNERS_SUCCESS, GET_PARTNERS_ERROR, GET_PARTNERS_LOADING, GET_PARTNERS_SUCCESS, LOGIN_ADMIN_ERROR, LOGIN_ADMIN_LOADING, LOGIN_ADMIN_SUCCESS, SET_ADMIN_ERROR, SET_ADMIN_LOADING, SET_ADMIN_SUCCESS} from "./actionTypes";
 
 export const createAdmin = (payload) => async (dispatch) => {
   dispatch({ type: SET_ADMIN_LOADING });
@@ -131,3 +112,21 @@ export const editPartnerDetails = (payload) => async (dispatch) => {
     dispatch({type:EDIT_PARTNERS_ERROR,payload:error});
   }
 };
+
+export const sendOTP=(payload)=>async(dispatch)=>{
+  const partnerName="fdjlfjs";
+  try {
+    let response = await fetch(
+      `https://technokart-backend.onrender.com/${partnerName}/otp`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    let result = await response.json();
+    console.log(result);
+  } catch (error) {
+    console.log(error);
+  }
+}

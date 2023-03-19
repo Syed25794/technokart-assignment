@@ -1,9 +1,9 @@
-import { Box } from "@chakra-ui/react";
+import { Box, useColorModeValue } from "@chakra-ui/react";
 import { AllRoutes } from "./components/AllRoutes";
 
 function App() {
   return (
-    <Box>
+    <Box bg={useColorModeValue('gray.50', 'gray.800')}>
       <AllRoutes />
     </Box>
   );

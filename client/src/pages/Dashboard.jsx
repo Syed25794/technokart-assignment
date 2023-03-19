@@ -1,4 +1,4 @@
-import {Alert, AlertIcon, Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
+import {Alert, AlertIcon, Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useColorModeValue,useDisclosure,} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPartnerModal } from "../components/AddPartnerModal";
@@ -26,7 +26,7 @@ export const Dashboard = () => {
 
 
   return (
-    <Box>
+    <Box bg={useColorModeValue('gray.50', 'gray.800')}>
       {isLoading ? (<Alert status='info' w="400px" m="auto" marginTop="10px" >
         <AlertIcon />Loading Partner Details
         </Alert>) : null 

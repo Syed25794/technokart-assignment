@@ -6,7 +6,7 @@ export const HomePage = ()=>{
     return(
         <ButtonGroup marginLeft="500px"  marginTop="250px" >
             <Button colorScheme="whatsapp" onClick={()=>navigate("/setAdminUser")} >Create Super Admin</Button>
-            <Button colorScheme="messenger" onClick={()=>navigate("/partnerLogin")} >Partner Login</Button>
+            <Button colorScheme="messenger" onClick={()=>navigate("/otp")} >Partner Login</Button>
         </ButtonGroup>
     )
 }
