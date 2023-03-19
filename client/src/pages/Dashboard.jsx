@@ -1,4 +1,4 @@
-import {Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
+import {Alert, AlertIcon, Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useDisclosure,} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPartnerModal } from "../components/AddPartnerModal";
@@ -8,7 +8,8 @@ import { getPartners } from "../redux/action";
 
 
 export const Dashboard = () => {
-  const { partners } =useSelector((store)=> store );
+  const { partners ,isCreated, isLoading } =useSelector((store)=> store );
+  console.log(isCreated);
   const [page, setPage] = useState(1);
   const limit = 10;
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,36 +25,12 @@ export const Dashboard = () => {
   }, [loadData]);
 
 
-  
-
-  const editPartnerDetails=async(user)=>{
-    console.log(user)
-    try {
-      const payload = {
-        partner_email: user.partner_email,
-      };
-      console.log(payload);
-      let response = await fetch(
-        "https://technokart-backend.onrender.com/super-admin/deletePartner",
-        {
-          method: "PATCH",
-          body: JSON.stringify(payload),
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      let result = await response.json();
-      console.log(result);
-      getPartners();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-
-
-
   return (
     <Box>
+      {isLoading ? (<Alert status='info' w="400px" m="auto" marginTop="10px" >
+        <AlertIcon />Loading Partner Details
+        </Alert>) : null 
+      }
       <Button onClick={onOpen} margin="20px" colorScheme="pink">Add Partners</Button>
       <AddPartnerModal isOpen={isOpen} onClose={onClose}/>
       <ButtonGroup float="right" marginRight="150px" marginBottom="15px" marginTop="20px" >
@@ -87,7 +64,7 @@ export const Dashboard = () => {
           <Tbody>
             {partners?.map((user,index) => {
               return (
-                <TableRow key={user._id} user={user}  editPartnerDetails={editPartnerDetails} index={index} page={page-1}/>
+                <TableRow key={user._id} user={user} index={index} page={page-1}/>
               );
             })}
           </Tbody>

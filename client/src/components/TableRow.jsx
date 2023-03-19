@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { deletePartner } from "../redux/action";
 import { EditModal } from "./EditModal";
 
-const TableRow = ({ user, editParnerDetails, index, page }) => {
+const TableRow = ({ user, index, page }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
 
@@ -13,17 +13,12 @@ const TableRow = ({ user, editParnerDetails, index, page }) => {
 
   return (
     <>
-      <EditModal
-        isOpen={isOpen}
-        onClose={onClose}
-        userDetails={user}
-        editPartnerDetails={editParnerDetails}
-      />
+      <EditModal isOpen={isOpen} onClose={onClose} userDetails={user}/>
       <Tr>
         <Td textAlign="center">{page * 10 + index + 1}</Td>
         <Td textAlign="center">{user.partner_name}</Td>
         <Td textAlign="center">{user.partner_email}</Td>
-        <Td textAlign="center">{user.login_link}</Td>
+        <Td textAlign="center" fontSize="13px">{user.login_link}</Td>
         <Td textAlign="center">
           <Button onClick={onOpen} colorScheme="yellow">
             Edit

@@ -38,18 +38,18 @@ export const SetAdminUser = () => {
   return (
     <Box>
       {isCreated ? (
-        <Alert status="success" w="400px" m="auto" marginTop="10px">
+        <Alert status="success" w="400px" m="auto" marginTop="10px" >
           <AlertIcon />
           Admin Created Successfully
         </Alert>
       ) : null}{" "}
       {isError ? (
-        <Alert status="error" w="400px" m="auto" marginTop="10px">
+        <Alert status="error" w="400px" m="auto" marginTop="10px" >
           <AlertIcon />
           Login Credential are incorrect!
         </Alert>
       ) : null}
-      {isCredential ? (<Alert status="error" w="400px" m="auto" marginTop="10px">
+      {isCredential ? (<Alert status="error" w="400px" m="auto" marginTop="10px" >
           <AlertIcon />
           Please provide all the credential!
         </Alert>) : null }

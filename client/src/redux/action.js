@@ -1,10 +1,13 @@
 import {
-    ADD_PARTNERS_ERROR,
-    ADD_PARTNERS_LOADING,
-    ADD_PARTNERS_SUCCESS,
-    DELETE_PARTNERS_ERROR,
-    DELETE_PARTNERS_LOADING,
+  ADD_PARTNERS_ERROR,
+  ADD_PARTNERS_LOADING,
+  ADD_PARTNERS_SUCCESS,
+  DELETE_PARTNERS_ERROR,
+  DELETE_PARTNERS_LOADING,
   DELETE_PARTNERS_SUCCESS,
+  EDIT_PARTNERS_ERROR,
+  EDIT_PARTNERS_LOADING,
+  EDIT_PARTNERS_SUCCESS,
   GET_PARTNERS_ERROR,
   GET_PARTNERS_LOADING,
   GET_PARTNERS_SUCCESS,
@@ -52,8 +55,8 @@ export const loginAdmin = (payload) => async (dispatch) => {
   }
 };
 
-export const deletePartner = ( email ) => async (dispatch) => {
-    dispatch({type:DELETE_PARTNERS_LOADING});
+export const deletePartner = (email) => async (dispatch) => {
+  dispatch({ type: DELETE_PARTNERS_LOADING });
   try {
     const payload = {
       partner_email: email,
@@ -68,15 +71,16 @@ export const deletePartner = ( email ) => async (dispatch) => {
     );
     let result = await response.json();
     console.log(result);
-    dispatch({type:DELETE_PARTNERS_SUCCESS,payload:email})
+    dispatch({ type: DELETE_PARTNERS_SUCCESS, payload: email });
   } catch (error) {
-    dispatch({type:DELETE_PARTNERS_ERROR,payload:error});
+    dispatch({ type: DELETE_PARTNERS_ERROR, payload: error });
   }
 };
 
-
-export const getPartners = ({page,limit}) => async (dispatch) => {
-    dispatch({type:GET_PARTNERS_LOADING});
+export const getPartners =
+  ({ page, limit }) =>
+  async (dispatch) => {
+    dispatch({ type: GET_PARTNERS_LOADING });
     try {
       let response = await fetch(
         `https://technokart-backend.onrender.com/super-admin/dashboard?page=${page}&limit=${limit}`,
@@ -86,23 +90,44 @@ export const getPartners = ({page,limit}) => async (dispatch) => {
         }
       );
       let result = await response.json();
-      dispatch({type:GET_PARTNERS_SUCCESS,payload:result.data});
+      dispatch({ type: GET_PARTNERS_SUCCESS, payload: result.data });
     } catch (error) {
-      dispatch({type:GET_PARTNERS_ERROR,payload:error});
+      dispatch({ type: GET_PARTNERS_ERROR, payload: error });
     }
+  };
+
+export const addPartner = (payload) => async (dispatch) => {
+  dispatch({ type: ADD_PARTNERS_LOADING });
+  try {
+    let response = await fetch(
+      "https://technokart-backend.onrender.com/super-admin/addPartner",
+      {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    let result = await response.json();
+    dispatch({ type: ADD_PARTNERS_SUCCESS, payload: result.payload });
+  } catch (error) {
+    dispatch({ type: ADD_PARTNERS_ERROR, payload: error });
+  }
 };
 
-export const addPartner = ( payload ) => async ( dispatch ) =>{
-    dispatch({type:ADD_PARTNERS_LOADING});
-    try {
-        let response = await fetch("https://technokart-backend.onrender.com/super-admin/addPartner",{
-          method:"POST",
-          body:JSON.stringify(payload),
-          headers:{"Content-Type":"application/json"}
-        });
-        let result = await response.json();
-        dispatch({type:ADD_PARTNERS_SUCCESS,payload:result.payload});
-      } catch (error) {
-        dispatch({type:ADD_PARTNERS_ERROR,payload:error});
+export const editPartnerDetails = (payload) => async (dispatch) => {
+  dispatch({type:EDIT_PARTNERS_LOADING});
+  try {
+    let response = await fetch(
+      "https://technokart-backend.onrender.com/super-admin/editPartner",
+      {
+        method: "PATCH",
+        body: JSON.stringify(payload),
+        headers: { "Content-Type": "application/json" },
       }
-}
+    );
+    let result = await response.json();
+    dispatch({type:EDIT_PARTNERS_SUCCESS,payload:result.updatePartner})
+  } catch (error) {
+    dispatch({type:EDIT_PARTNERS_ERROR,payload:error});
+  }
+};

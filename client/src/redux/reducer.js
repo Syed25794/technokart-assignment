@@ -1,4 +1,4 @@
-import { ADD_PARTNERS_ERROR, ADD_PARTNERS_LOADING, ADD_PARTNERS_SUCCESS, DELETE_PARTNERS_ERROR, DELETE_PARTNERS_LOADING, DELETE_PARTNERS_SUCCESS, GET_PARTNERS_ERROR, GET_PARTNERS_LOADING, GET_PARTNERS_SUCCESS, LOGIN_ADMIN_ERROR, LOGIN_ADMIN_LOADING, LOGIN_ADMIN_SUCCESS, SET_ADMIN_ERROR, SET_ADMIN_LOADING, SET_ADMIN_SUCCESS } from "./actionTypes";
+import { ADD_PARTNERS_ERROR, ADD_PARTNERS_LOADING, ADD_PARTNERS_SUCCESS, DELETE_PARTNERS_ERROR, DELETE_PARTNERS_LOADING, DELETE_PARTNERS_SUCCESS, EDIT_PARTNERS_ERROR, EDIT_PARTNERS_LOADING, EDIT_PARTNERS_SUCCESS, GET_PARTNERS_ERROR, GET_PARTNERS_LOADING, GET_PARTNERS_SUCCESS, LOGIN_ADMIN_ERROR, LOGIN_ADMIN_LOADING, LOGIN_ADMIN_SUCCESS, SET_ADMIN_ERROR, SET_ADMIN_LOADING, SET_ADMIN_SUCCESS } from "./actionTypes";
 
 const initState={
     partners:[],
@@ -126,6 +126,31 @@ export const reducer = ( state = initState , action )=>{
                 partners:[...state.partners,payload]
             }
         case ADD_PARTNERS_ERROR:
+            return {
+                ...state,
+                isError:true,
+                isLoading:false,
+                isCreated:false,
+                isAuth:false
+            }
+        case EDIT_PARTNERS_LOADING:
+            return {
+                ...state,                    
+                isLoading:true,
+                isError:false,
+                isCreated:false,
+                isAuth:true
+            }
+        case EDIT_PARTNERS_SUCCESS:
+            return {
+                ...state,
+                isCreated:true,
+                isLoading:false,
+                isError:false,
+                isAuth:true,
+                partners:[...state.partners,payload[0]]
+            }
+        case EDIT_PARTNERS_ERROR:
             return {
                 ...state,
                 isError:true,
