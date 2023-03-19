@@ -11,11 +11,13 @@ export const SendOTP = () => {
     const navigate = useNavigate();
     console.log(otp,login_link);
 
+
     if( otp && login_link ){
         setTimeout(()=>{
             const endPoint = login_link.split("/");
             console.log(endPoint,otp,endPoint[endPoint.length-2]);
             navigate(`/${endPoint[endPoint.length-2]}/login`)
+            dispatch({type:"SET_PARTNER_NAME",payload:endPoint[endPoint.length-2]});
         },1000)
     }
 

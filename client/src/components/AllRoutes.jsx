@@ -18,7 +18,7 @@ export const AllRoutes = () => {
         <Route path="/otp" element={<SendOTP />} />
         <Route path="/:partnerName/login" element={<VerifyOTP />} />
         <Route path="/add_event" element={<AddEvent />} />
-        <Route path="/thankyou" element={<ThankYou />} />
+        <Route path="/thankyoupage" element={<ThankYou />} />
       </Routes>
   );
 };
