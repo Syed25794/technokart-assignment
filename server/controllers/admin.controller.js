@@ -98,7 +98,8 @@ const editPartnerDetails = async (req, res) => {
   try {
     //updating partner values
     const result = await Partner.updateOne({ partner_email },{ partner_email: newEmail, partner_name: newName, login_link });
-    res.status(202).send({ result });
+    const updatePartner = await Partner.find({partner_email:newEmail});
+    res.status(202).send({ updatePartner });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
