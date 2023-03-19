@@ -25,7 +25,7 @@ application.use(cors());
 // }));
 
 application.use("/super-admin",adminRoutes);
-application.use("/:partnername",partnerRoutes);
+application.use(partnerRoutes);
 // Middleware function for handling undefined routes
 application.use((req, res, next) => {
     res.status(404).send('Sorry, the requested URL was not found on this server.');
