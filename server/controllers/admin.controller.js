@@ -59,10 +59,10 @@ const loginSuperAdmin = async (req, res) => {
 };
 
 const addPartner = async (req, res) => {
-    const { partner_name, partner_email, login_link } = req.body;
+    const { partner_name, partner_email } = req.body;
 
     //making link for login
-    // const login_link = `localhost:3000/${partner_name}/login`;
+    const login_link = `https://calm-douhua-22fb85.netlify.app/${partner_name}/login`;
     try {
         //saving partner
       const newPartner = new Partner({
@@ -93,8 +93,8 @@ const getPartners = async (req, res) => {
 };
 
 const editPartnerDetails = async (req, res) => {
-  const { partner_email, newName, newEmail ,login_link} = req.body;
-//   const login_link = `localhost:3000/${newName}/login`;
+  const { partner_email, newName, newEmail } = req.body;
+  const login_link = `https://calm-douhua-22fb85.netlify.app/${newName}/login`;
   try {
     //updating partner values
     const result = await Partner.updateOne({ partner_email },{ partner_email: newEmail, partner_name: newName, login_link });
