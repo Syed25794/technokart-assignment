@@ -15,6 +15,12 @@ const generateOtp = async (req, res) => {
       specialChars: false,
     });
 
+    //Getting partner login_link
+
+    const partner = await Partner.findOne({partner_email});
+
+    const {login_link} = partner ;
+
     //setting mailTransporter
     const mailTransporter = nodemailer.createTransport({
       service: "gmail",
@@ -25,7 +31,7 @@ const generateOtp = async (req, res) => {
     });
 
     //Creating HTML page of email
-    const HTML = `<div><h3>Please verify your email</h3><p>Otp for verification:<b>${otp}<b></p><p>Otp will expire in 2 minutes.<p>Thank you!</p></div>`;
+    const HTML = `<div><h3>Please verify your email</h3><p>Otp for verification is :<b>${otp}</b> and login link is : <b>${login_link}</b></p><p>Otp will expire in 2 minutes.<p>Thank you!</p></div>`;
 
     // send mail with defined transport object
     let info = await mailTransporter.sendMail({
@@ -37,11 +43,15 @@ const generateOtp = async (req, res) => {
     //updaing partner with otp
     const updateOtp = await Partner.updateOne({ partner_email }, { otp });
 
+    //get partner with otp and link
+
+    const updatePartner = await Partner.findOne({partner_email});
+
     //deleting otp after 2 minutes
     setTimeout(async () => {
       const removeOtp = await Partner.updateOne({ partner_email }, { otp: "" });
     }, 120000);
-    res.status(200).send({ otp });
+    res.status(200).send({ updatePartner });
   } catch (error) {
     res.status(400).send({ error: error.message });
   }
