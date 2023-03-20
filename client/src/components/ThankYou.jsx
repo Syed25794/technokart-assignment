@@ -11,7 +11,7 @@ export const ThankYou = () => {
   },2000);
 
   if( redirect ){
-    navigate("/otp");
+    navigate("/");
   }
   return <Box margin="auto" marginTop="20px" width="600px">
     <Image src="https://www.funimada.com/assets/images/cards/big/thank-you-2.gif" alt="thank-you" />

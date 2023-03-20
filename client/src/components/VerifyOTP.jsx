@@ -1,31 +1,42 @@
 import {Flex, Stack , Center, Heading ,HStack, PinInput, PinInputField, useColorModeValue, FormControl, Button, Alert, AlertIcon } from "@chakra-ui/react"
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { useNavigate } from "react-router-dom";
 import { sendOTP } from "../redux/action";
 import { SET_OTP_EMPTY } from "../redux/actionTypes";
 import { Timer } from "./Timer";
 
 export const VerifyOTP = ()=>{
     const {otp,email} = useSelector((store)=>store);
+    const [seconds,setSeconds]=useState(120);
+    let timerId=useRef(null);
     const pin1Ref = useRef(null);
     const pin2Ref = useRef(null);
     const pin3Ref = useRef(null);
     const pin4Ref = useRef(null);
     const [isVerify,setIsVerify]=useState("");
     const navigate=useNavigate();
+    console.log(otp,email,seconds,"verify");
     const dispatch = useDispatch();
-    console.log(otp,email,"verify");
+
+
+
+    useEffect(()=>{
+        if( seconds > 0){
+            let id=setInterval(()=>{
+                setSeconds((prev)=>prev-1);
+                timerId.current=id;
+            },1000)
+        }
+        return()=>{
+            clearInterval(timerId.current);
+        }
+    },[seconds])
+
 
     const resendOTP=()=>{
-        console.log(email);
         dispatch(sendOTP({partner_email:email}));
     }
-
-    setTimeout(()=>{
-        dispatch({type:SET_OTP_EMPTY});
-    },138000)
 
     const handlePin=()=>{
         const pin1Value = pin1Ref.current.value;
@@ -54,10 +65,15 @@ export const VerifyOTP = ()=>{
             },500)
         }
       }
+    
+    if( seconds === 1 ){
+        console.log(seconds);
+        dispatch({type:SET_OTP_EMPTY});
+    }
 
-      if( isVerify ){
+    if( isVerify ){
         navigate("/add_event")
-      }
+    }
 
     return (
         <>
@@ -87,7 +103,7 @@ export const VerifyOTP = ()=>{
                     {email}
                 </Center>
                 <Center>
-                    <Timer initial={120} />
+                    <Timer time={seconds} />
                 </Center>
                 <FormControl>
                     <Center>

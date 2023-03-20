@@ -22,13 +22,12 @@ export const AddEvent = () => {
     console.log(data);
   }
 
-  if( isCreated ){
-    navigate("/thankyoupage");
-  }
-
   const addEventSend=()=>{
     setData({event_name:"", country:"", state:"", city:"", pincode:"", event_photo:""});
     dispatch(addEvent(data));
+    setTimeout(()=>{
+      navigate("/thankyoupage");
+    },1000)
   }
   return(
     <>
