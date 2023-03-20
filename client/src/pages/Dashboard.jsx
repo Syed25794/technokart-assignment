@@ -1,6 +1,7 @@
 import {Alert, AlertIcon, Box,Button,ButtonGroup,Table,TableContainer,Tbody,Text,Th,Thead,Tr,useColorModeValue,useDisclosure,} from "@chakra-ui/react";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { AddPartnerModal } from "../components/AddPartnerModal";
 import TableRow from "../components/TableRow";
 import { getPartners } from "../redux/action";
@@ -14,6 +15,7 @@ export const Dashboard = () => {
   const limit = 10;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const loadData = useCallback(()=>{
     const payload={page,limit};
@@ -32,6 +34,7 @@ export const Dashboard = () => {
         </Alert>) : null 
       }
       <Button onClick={onOpen} margin="20px" colorScheme="pink">Add Partners</Button>
+      <Button onClick={()=>navigate("/")} margin="20px" colorScheme="purple">Back To Home</Button>
       <AddPartnerModal isOpen={isOpen} onClose={onClose}/>
       <ButtonGroup float="right" marginRight="150px" marginBottom="15px" marginTop="20px" >
         <Button colorScheme="purple" onClick={() => {setPage((prev) => prev + 1);}} isDisabled={page === 10 || partners.length < 10}>

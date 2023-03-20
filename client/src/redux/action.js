@@ -22,8 +22,7 @@ import {
   SEND_OTP_SUCCESS,
   SET_ADMIN_ERROR,
   SET_ADMIN_LOADING,
-  SET_ADMIN_SUCCESS,
-  SET_OTP_EMPTY,
+  SET_ADMIN_SUCCESS
 } from "./actionTypes";
 
 export const createAdmin = (payload) => async (dispatch) => {
@@ -159,9 +158,6 @@ export const sendOTP = (payload) => async (dispatch) => {
         email: result.updatePartner.partner_email,
       },
     });
-    setTimeout(() => {
-      dispatch({ type: SET_OTP_EMPTY });
-    }, 120000);
   } catch (error) {
     dispatch({ type: SEND_OTP_ERROR });
   }

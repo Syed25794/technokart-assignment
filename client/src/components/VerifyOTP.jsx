@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { useNavigate } from "react-router-dom";
 import { sendOTP } from "../redux/action";
+import { SET_OTP_EMPTY } from "../redux/actionTypes";
+import { Timer } from "./Timer";
 
 export const VerifyOTP = ()=>{
     const {otp,email} = useSelector((store)=>store);
@@ -14,11 +16,16 @@ export const VerifyOTP = ()=>{
     const [isVerify,setIsVerify]=useState("");
     const navigate=useNavigate();
     const dispatch = useDispatch();
+    console.log(otp,email,"verify");
 
     const resendOTP=()=>{
         console.log(email);
         dispatch(sendOTP({partner_email:email}));
     }
+
+    setTimeout(()=>{
+        dispatch({type:SET_OTP_EMPTY});
+    },138000)
 
     const handlePin=()=>{
         const pin1Value = pin1Ref.current.value;
@@ -78,6 +85,9 @@ export const VerifyOTP = ()=>{
                 </Center>
                 <Center fontSize={{ base: 'sm', sm: 'md' }} fontWeight="bold" color={useColorModeValue('gray.800', 'gray.400')}>
                     {email}
+                </Center>
+                <Center>
+                    <Timer initial={120} />
                 </Center>
                 <FormControl>
                     <Center>

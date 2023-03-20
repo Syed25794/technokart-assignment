@@ -184,8 +184,7 @@ export const reducer = ( state = initState , action )=>{
         case SET_OTP_EMPTY:
             return {
                 ...state,
-                otp:0,
-                login_link:""
+                otp:0
             }
         case SEND_OTP_ERROR:
             return {

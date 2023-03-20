@@ -10,6 +10,7 @@ export const AddEvent = () => {
   const { name, isLoading, isError, isCreated } = useSelector((store)=>store);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log(name,isLoading,isError,isCreated);
 
   const handleChange=(e)=>{
     const { value, name} = e.target;
