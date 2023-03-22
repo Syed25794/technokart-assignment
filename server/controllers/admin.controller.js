@@ -51,7 +51,7 @@ const loginSuperAdmin = async (req, res) => {
         }
       });
     }else{
-      
+      res.status(400).send({result:false});
     }
   } catch (error) {
     res.status(400).send({ error: error.message });
